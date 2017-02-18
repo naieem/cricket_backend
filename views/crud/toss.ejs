@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+<body>
+
+  <div class="container" ng-controller="myCtrl">
+    <h2>Select Your Favourite Teams</h2>
+    <form method="post">
+      <div ng-repeat="team in teams">
+        <div class="checkbox">
+          <input type="checkbox" ng-disabled="hideAll && !tm" ng-model="tm" ng-change="change(this)"><label ng-bind="team.name"></label>
+        </div> 
+      </div>
+      <button type="submit" ng-click="GotoTossPage($event,list)" class="btn btn-default">Submit</button>
+    </form>
+    <div ng-bind="list | json"></div>
+  </div>
+
+  <script>
+    // var app = angular.module('myApp', []);
+    // app.controller('myCtrl', function($scope) {
+    //   $scope.teams=[
+    //   {
+    //     name:'Bangladesh',
+    //     id:'bd'
+    //   },
+    //   {
+    //     name:'India',
+    //     id:'in'
+    //   },
+    //   {
+    //     name:'Pakistan',
+    //     id:'pak'
+    //   },
+    //   {
+    //     name:'Australia',
+    //     id:'aus'
+    //   },
+    //   {
+    //     name:'England',
+    //     id:'eng'
+    //   },
+    //   {
+    //     name:'Sri Lanka',
+    //     id:'sl'
+    //   }
+    //   ];
+    //   $scope.list=[];
+    //   $scope.hideAll=false;
+    //   $scope.disable=function(){
+    //     if($scope.list.length==2){
+    //       $scope.hideAll=true;
+    //     }
+    //     else $scope.hideAll=false;
+    //   }
+    //   $scope.disable();
+    //   $scope.change=function(th){
+    //     console.log(th.tm);
+    //     if(th.tm){
+    //       $scope.list.push(th.team);
+    //     }
+    //     else{
+    //       $scope.list.splice($scope.list.indexOf(th.team),1);
+    //     }
+    //     console.log($scope.list.length);
+    //     $scope.disable();
+    //   }
+
+    //   $scope.GotoTossPage=function($event,list){
+    //     $event.preventDefault();
+    //     console.log(list);
+    //   }
+    // });
+  </script>
+
+</body>
+</html>

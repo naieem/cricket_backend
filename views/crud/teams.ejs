@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+<body>
+
+  <div class="container" ng-controller="myCtrl">
+    <h2>Select Your Favourite Teams</h2>
+    <form method="post">
+      <div ng-repeat="team in teams">
+        <div class="checkbox">
+          <input type="checkbox" ng-disabled="hideAll && !tm" ng-model="tm" ng-change="change(this)"><label ng-bind="team.name"></label>
+        </div> 
+      </div>
+      <h1>Two Teams</h1>
+      <div ng-repeat="lists in list">
+        <div class="checkbox">
+          <input type="radio" name="toss" ng-model="ts" ng-click="tossselect(lists)"><label ng-bind="lists.name"></label>
+        </div>
+      </div>
+
+      <button type="submit" ng-click="LetsStartPlay($event)" class="btn btn-default">Start</button>
+    </form>
+
+    <a href="#" ng-click="Bowl()" ng-show="matchid !== ''">bowl</a>
+    <div class="score" ng-show="matchid !== ''">
+      <div ng-bind="score | json"></div>
+      <p ng-repeat="scores in score">
+        Over:<span ng-bind="scores.over"></span>
+        Ball:<span ng-bind="scores.ball"></span>
+        Run:<span ng-bind="scores.run"></span>
+        TotalRun:<span ng-bind="totalrun"></span>
+      </p>
+    </div>
+
+    <!-- <div ng-bind="list | json"></div> -->
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope,$http) {
+      $scope.teams=[
+      {
+        name:'Bangladesh',
+        id:'bd'
+      },
+      {
+        name:'India',
+        id:'in'
+      },
+      {
+        name:'Pakistan',
+        id:'pak'
+      },
+      {
+        name:'Australia',
+        id:'aus'
+      },
+      {
+        name:'England',
+        id:'eng'
+      },
+      {
+        name:'Sri Lanka',
+        id:'sl'
+      }
+      ];
+      $scope.list=[];
+      $scope.tossowner="";
+      $scope.matchid="";
+      $scope.hideAll=false;
+      $scope.disable=function(){
+        if($scope.list.length==2){
+          $scope.hideAll=true;
+        }
+        else $scope.hideAll=false;
+      }
+      $scope.change=function(th){
+        console.log(th.tm);
+        if(th.tm){
+          $scope.list.push(th.team);
+        }
+        else{
+          $scope.list.splice($scope.list.indexOf(th.team),1);
+        }
+        console.log($scope.list.length);
+        $scope.disable();
+      }
+
+      $scope.LetsStartPlay=function($event){
+        $event.preventDefault();
+        var obj={
+          'teams':$scope.list,
+          'toss':$scope.tossowner
+        }
+        // console.log(list);
+        $http.post("http://localhost:3000/crud/toss", obj)
+        .then(function(response) {
+          console.log(response.data._id);
+          $scope.matchid=response.data._id;
+        });
+      }
+
+      $scope.tossselect=function(list){
+        console.log(list);
+        $scope.tossowner=list.name;
+        // $http.post("http://localhost:3000/crud/toss", list)
+        // .then(function(response) {
+        //   console.log(response);
+        // });
+      }
+
+      /* Bowling calcualtion */
+      $scope.score=[];
+      $scope.over=0;
+      $scope.ball=0;
+      $scope.Bowl=function(){
+        if($scope.over === 1 && $scope.ball === 6){
+          var obj={
+            'bowls':$scope.score,
+            'id':$scope.matchid
+          }
+        // console.log(list);
+        $http.post("http://localhost:3000/crud/runUpdate", obj)
+        .then(function(response) {
+          console.log(response);
+          // $scope.matchid=response.data._id;
+        });
+        $scope.matchid="";
+      }
+      else{
+        if($scope.ball>=6){
+          $scope.over++;
+          $scope.ball=0;
+        }
+        $scope.ball++;
+        var run=Math.floor((Math.random() * 7) + 1);
+        var obj={
+          over:$scope.over,
+          ball:$scope.ball,
+          run:run
+        }
+        $scope.score.push(obj);
+        $scope.totalRun();  
+      }
+
+    }
+    $scope.totalRun=function(){
+      $scope.totalrun=0;
+      for (var i = 0; i < $scope.score.length; i++) {
+        $scope.totalrun=parseInt($scope.totalrun)+parseInt($scope.score[i].run);
+          // console.log($scope.score.run);
+        }
+        // console.log($scope.score.length);
+      }
+
+    });
+  </script>
+
+</body>
+</html>

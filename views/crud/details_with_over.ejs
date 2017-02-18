@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Match Details</h2>
+    <div class="score">
+      <p>Toss Won By:<%= match.toss %></p>
+      <p><%= match.teams[0].name %> vs <%= match.teams[1].name %> </p>
+      <p>Total Run:<%= totalRun %></p>
+      <h2>Ball By Ball Update</h2>
+      <% for(var i=0; i< matchDetails.length; i++) {%>
+      <p>
+      Over:<%= matchDetails[i].over %>
+        Ball:<%= matchDetails[i].ball %>
+        Run:<%= matchDetails[i].run %>
+      </p>
+      <% } %>
+      
+    </div>
+
+    <!-- <div ng-bind="list | json"></div> -->
+  </div>
+
+</body>
+</html>
