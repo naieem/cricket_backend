@@ -56,9 +56,9 @@ router.get('/matches', function(req, res) {
     Match.find(function(err, matches) {
         if (err)
             res.send(err);
-        res.render('crud/matches', { title: "Add Matches",matches:matches });
-        var myJSON = JSON.stringify(matches);
-         // res.json(matches);
+        // res.render('crud/matches', { title: "Add Matches",matches:matches });
+        // var myJSON = JSON.stringify(matches);
+         res.send(matches);
      });
     // res.render('crud/matches', { title: "Add Matches" });
 });
@@ -70,7 +70,12 @@ router.get('/details/:matchId', function (req, res) {
       for (var i = 0; i < match.bowls.length; i++) {
           run=run+match.bowls[i].run;
       }
-      res.render('crud/details', { title: "match details",match:match,totalRun:run });
+      //res.render('crud/details', { title: "match details",match:match,totalRun:run });
+      var obj={
+        matchDetails:match,
+        totalRun:run
+      }
+      res.send(obj);
   });
 });
 
@@ -85,7 +90,13 @@ router.get('/details/:matchId/:over/:ball', function (req, res) {
           run=run+match.bowls[i].run;
           matchDetails.push(match.bowls[i]);
       }
-      res.render('crud/details_with_over', { title: "match details",matchDetails:matchDetails,match:match,totalRun:run });
+      var obj={
+        matchDetails:match,
+        matchStats:matchDetails,
+        totalRun:run
+      }
+      res.send(obj);
+      // res.render('crud/details_with_over', { title: "match details",matchDetails:matchDetails,match:match,totalRun:run });
   });
 });
 
