@@ -43,7 +43,7 @@ router.post('/runUpdate', function(req, res) {
         , function(err, match) {
           if (err) res.send(err);
           else{
-            Match.find(function(err, match) {
+            Match.findById(matchid,function(err, match) {
                 if (err) res.send(err);
                 res.send(match);
             });
