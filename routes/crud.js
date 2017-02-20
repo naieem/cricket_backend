@@ -38,11 +38,9 @@ router.post('/runUpdate', function(req, res) {
     //var match = new Match();
     var bowls = req.body.bowls;
     var matchid = req.body.id;
-    Match.findByIdAndUpdate(matchid
-        , { bowls: bowls }
-        , function(err, match) {
-          if (err) res.send(err);
-          else{
+    Match.findByIdAndUpdate(matchid, { bowls: bowls }, function(err, match) {
+        if (err) res.send(err);
+        else {
             Match.find(function(err, match) {
                 if (err) res.send(err);
                 res.send(match);
@@ -58,48 +56,65 @@ router.get('/matches', function(req, res) {
             res.send(err);
         // res.render('crud/matches', { title: "Add Matches",matches:matches });
         // var myJSON = JSON.stringify(matches);
-         res.send(matches);
-     });
+        res.send(matches);
+    });
     // res.render('crud/matches', { title: "Add Matches" });
 });
 
-router.get('/details/:matchId', function (req, res) {
+router.get('/details/:matchId', function(req, res) {
     Match.findById(req.params.matchId, function(err, match) {
-      if (err) throw err;
-      var run=0;
-      for (var i = 0; i < match.bowls.length; i++) {
-          run=run+match.bowls[i].run;
-      }
-      //res.render('crud/details', { title: "match details",match:match,totalRun:run });
-      var obj={
-        matchDetails:match,
-        totalRun:run
-      }
-      res.send(obj);
-  });
+        if (err) throw err;
+        var run = 0;
+        for (var i = 0; i < match.bowls.length; i++) {
+            run = run + match.bowls[i].run;
+        }
+        //res.render('crud/details', { title: "match details",match:match,totalRun:run });
+        var obj = {
+            matchDetails: match,
+            totalRun: run
+        }
+        res.send(obj);
+    });
 });
 
-router.get('/details/:matchId/:over/:ball', function (req, res) {
+router.get('/details/:matchId/:over/:ball', function(req, res) {
     Match.findById(req.params.matchId, function(err, match) {
-      if (err) throw err;
-      var run=0;
-      var matchDetails=[];
-      for (var i = 0; i < match.bowls.length; i++) {
-        if(match.bowls[i].over == req.params.over && match.bowls[i].ball > req.params.ball)
-            break;
-          run=run+match.bowls[i].run;
-          matchDetails.push(match.bowls[i]);
-      }
-      var obj={
-        matchDetails:match,
-        matchStats:matchDetails,
-        totalRun:run
-      }
-      res.send(obj);
-      // res.render('crud/details_with_over', { title: "match details",matchDetails:matchDetails,match:match,totalRun:run });
-  });
+        if (err) throw err;
+        var run = 0;
+        var matchDetails = [];
+        for (var i = 0; i < match.bowls.length; i++) {
+            if (match.bowls[i].over == req.params.over && match.bowls[i].ball > req.params.ball)
+                break;
+            run = run + match.bowls[i].run;
+            matchDetails.push(match.bowls[i]);
+        }
+        var obj = {
+            matchDetails: match,
+            matchStats: matchDetails,
+            totalRun: run
+        }
+        res.send(obj);
+        // res.render('crud/details_with_over', { title: "match details",matchDetails:matchDetails,match:match,totalRun:run });
+    });
 });
 
+/* DELETE /todos/:id */
+router.post('/delete', function(req, res, next) {
+    Match.findByIdAndRemove(req.body.id, function(err, post) {
+        if (err) res.send(err);
+        res.send(true);
+        // Match.find(function(err, matches) {
+        //     if (err)
+        //         res.send(err);
+        //     // res.render('crud/matches', { title: "Add Matches",matches:matches });
+        //     // var myJSON = JSON.stringify(matches);
+        //     res.send(matches);
+        // });
+        // res.send(post);
+        // res.send(req.body);
+    });
+    // res.send(req.body.id);
+});
 
 // router.get('/add', function(req, res) {
 //     res.render('crud/add', { title: "Add Data" });
