@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://naieem:naieem@ds153709.mlab.com:53709/user');
+mongoose.connect('mongodb://naieem:naieem@ds157509.mlab.com:57509/cricket_supto');
 mongoose.connection.on('connected',function(){
 	console.log('connected');
 });
