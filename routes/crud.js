@@ -95,6 +95,41 @@ router.get('/details/:matchId', function(req, res) {
     });
 });
 
+
+/*
+* update ball by ball
+*/
+router.post('/updateBallByBall', function(req, res) {
+//    Match.findById(req.params.matchId, function(err, match) {
+//        if (err) throw err;
+//        var run = 0;
+//        for (var i = 0; i < match.bowls.length; i++) {
+//            run = run + match.bowls[i].run;
+//        }
+//        //res.render('crud/details', { title: "match details",match:match,totalRun:run });
+//        var obj = {
+//            matchDetails: match,
+//            totalRun: run
+//        }
+//        res.send(obj);
+//    });
+
+    Match.update(
+        { _id : req.body.matchId ,"bowls.over": parseInt(req.body.over),"bowls.ball": parseInt(req.body.ball) },
+        { $set:
+            {
+                'bowls.$.run': parseInt(req.body.run)
+            }
+        },
+        function(err, result) {
+            if (err)
+                res.send(err);
+            res.send(result);
+        }
+    );
+    //res.send(req.body.run);
+});
+
 router.get('/details/:matchId/:over/:ball', function(req, res) {
     Match.findById(req.params.matchId, function(err, match) {
         if (err) throw err;
