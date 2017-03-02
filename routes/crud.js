@@ -50,6 +50,24 @@ router.post('/runUpdate', function(req, res) {
 });
 
 
+router.post('/UpdateBall', function(req, res) {
+    // console.log("req");
+    // console.log(req.body);
+    //var match = new Match();
+    var bowl = req.body.bowl;
+    var matchid = req.body.id;
+    Match.findByIdAndUpdate(matchid, { bowls: bowl }, function(err, match) {
+        if (err) res.send(err);
+        Match.findById(matchid, function(err, match) {
+            if (err) throw err;
+            res.send(match);
+        });
+    });
+    // res.send(bowl);
+});
+
+
+
 router.get('/matches', function(req, res) {
     Match.find(function(err, matches) {
         if (err)
